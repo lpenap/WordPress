@@ -1,2 +1,6 @@
 wp-content/debug.log
-wp-config.php-LOCAL
+wp-config.php
+
+wp-config-local.php
+wp-config-dev.php
+wp-config-prod.php

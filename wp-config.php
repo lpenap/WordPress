@@ -1,59 +1,33 @@
 <?php
+
 /**
- * The base configuration for WordPress
- *
- * The wp-config.php creation script uses this file during the
- * installation. You don't have to use the web site, you can
- * copy this file to "wp-config.php" and fill in the values.
- *
- * This file contains the following configurations:
- *
- * * MySQL settings
- * * Secret keys
- * * Database table prefix
- * * ABSPATH
- *
- * @link https://codex.wordpress.org/Editing_wp-config.php
- *
- * @package WordPress
- */
+* Define type of server
+*
+* Depending on the type other stuff can be configured
+* Note: Define them all, don't skip one if other is already defined
+*/
 
-// ** MySQL settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
-define( 'DB_NAME', 'SEE CREDENTIALS FILE' );
+/** Absolute path to the WordPress directory. */
+if (! defined('ABSPATH')) {
+    define('ABSPATH', dirname(__FILE__) . '/');
+}
 
-/** MySQL database username */
-define( 'DB_USER', 'SEE CREDENTIALS FILE' );
+define('WP_CREDENTIALS_PATH', ABSPATH); // cache it for multiple use
+define('WP_SERVER_LOCAL', file_exists(WP_CREDENTIALS_PATH . 'wp-config-local.php'));
+define('WP_SERVER_DEV', file_exists(WP_CREDENTIALS_PATH . 'wp-config-dev.php'));
+define('WP_SERVER_PROD', file_exists(WP_CREDENTIALS_PATH . 'wp-config-prod.php'));
 
-/** MySQL database password */
-define( 'DB_PASSWORD', 'SEE CREDENTIALS FILE' );
+/**
+* Load DB credentials
+*/
 
-/** MySQL hostname */
-define( 'DB_HOST', 'SEE CREDENTIALS FILE' );
-
-/** Database Charset to use in creating database tables. */
-define( 'DB_CHARSET', 'utf8mb4' );
-
-/** The Database Collate type. Don't change this if in doubt. */
-define( 'DB_COLLATE', '' );
-
-/**#@+
- * Authentication Unique Keys and Salts.
- *
- * Change these to different unique phrases!
- * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
- * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
- *
- * @since 2.6.0
- */
-define( 'AUTH_KEY',         'see credentials file' );
-define( 'SECURE_AUTH_KEY',  'see credentials file' );
-define( 'LOGGED_IN_KEY',    'see credentials file' );
-define( 'NONCE_KEY',        'see credentials file' );
-define( 'AUTH_SALT',        'see credentials file' );
-define( 'SECURE_AUTH_SALT', 'see credentials file' );
-define( 'LOGGED_IN_SALT',   'see credentials file' );
-define( 'NONCE_SALT',       'see credentials file' );
+if (WP_SERVER_LOCAL) {
+    require WP_CREDENTIALS_PATH . 'wp-config-local.php';
+} elseif (WP_SERVER_DEV) {
+    require WP_CREDENTIALS_PATH . 'p-config-dev.php';
+} else {
+    require WP_CREDENTIALS_PATH . 'wp-config-prod.php';
+}
 
 /**#@-*/
 
@@ -77,16 +51,14 @@ $table_prefix = 'wp_';
  *
  * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
-define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', true);
-
-/* That's all, stop editing! Happy blogging. */
-
-/** Absolute path to the WordPress directory. */
-if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', dirname( __FILE__ ) . '/' );
-}
-
+ if (WP_SERVER_LOCAL || WP_SERVER_DEV) {
+     define('WP_DEBUG', true);
+     define('WP_DEBUG_LOG', true); // Stored in wp-content/debug.log
+     define('SCRIPT_DEBUG', true);
+     define('SAVEQUERIES', true);
+ } else {
+     define('WP_DEBUG', false);
+ }
+ 
 /** Sets up WordPress vars and included files. */
-require_once( ABSPATH . 'wp-settings.php' );
-
+require_once(ABSPATH . 'wp-settings.php');
