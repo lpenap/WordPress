@@ -1,0 +1,5 @@
+wp-content/debug.log
+
+wp-config-local.php
+wp-config-dev.php
+wp-config-prod.php
