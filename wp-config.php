@@ -59,6 +59,8 @@ $table_prefix = 'wp_';
  } else {
      define('WP_DEBUG', false);
  }
+
+define( 'WP_AUTO_UPDATE_CORE', false );
  
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
